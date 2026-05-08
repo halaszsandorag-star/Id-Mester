@@ -37,9 +37,7 @@ const Home = () => {
     return (
         <div className="min-h-screen bg-slate-50 pt-20">
 
-            {/* Hero Szekció animált hátérrel */}
             <section className="relative overflow-hidden px-4 pt-20 pb-32 sm:px-6 lg:px-8">
-                {/* Lebegő Blob Animációk (Háttér) */}
                 <div className="absolute top-0 left-1/2 w-full -translate-x-1/2 h-full max-w-7xl overflow-hidden pointer-events-none z-0">
                     <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-primary-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
                     <div className="absolute top-[20%] right-[-5%] w-96 h-96 bg-teal-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
@@ -66,7 +64,6 @@ const Home = () => {
                         Fodrász, fogorvos, vagy autószerelő? Felejtsd el a telefonálgatást. Foglalj gyorsan és egyszerűen, a nap 24 órájában.
                     </p>
 
-                    {/* Keresőmező Glassmorphism */}
                     <form
                         onSubmit={handleSearch}
                         className={`max-w-3xl mx-auto relative transition-all duration-300 ${isFocused ? 'scale-[1.02] shadow-glow' : 'shadow-xl'} rounded-2xl md:rounded-full bg-white p-2 border border-slate-100 flex flex-col md:flex-row items-center gap-2`}
@@ -88,7 +85,6 @@ const Home = () => {
                         </button>
                     </form>
 
-                    {/* Features */}
                     <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 text-slate-600 font-medium">
                         <div className="flex items-center justify-center gap-2"><Star className="w-5 h-5 text-amber-400 fill-amber-400" /> Megbízható partnerek</div>
                         <div className="flex items-center justify-center gap-2"><Clock className="w-5 h-5 text-primary-500" /> 0-24 online foglalás</div>
@@ -97,7 +93,6 @@ const Home = () => {
                 </div>
             </section>
 
-            {/* Kategóriák */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 pb-24">
                 <div className="flex justify-between items-end mb-8 md:mb-12">
                     <div>
@@ -125,7 +120,6 @@ const Home = () => {
                                 style={{ animationDelay: `${index * 50}ms` }}
                             >
                                 <div className="bg-white rounded-2xl p-6 md:p-8 text-center border border-slate-100 shadow-sm hover:shadow-xl hover:border-primary-200 transition-all duration-300 h-full flex flex-col items-center justify-center transform hover:-translate-y-1 relative overflow-hidden">
-                                    {/* Decorative hover gradient */}
                                     <div className="absolute inset-0 bg-gradient-to-br from-primary-50 to-teal-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
                                     <div className="relative z-10">

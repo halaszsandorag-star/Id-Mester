@@ -4,7 +4,6 @@ import { authenticate } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// POST /api/appointments - időpont foglalása (felhasználó)
 router.post('/', authenticate, async (req, res) => {
     const { slot_id, notes, service_id } = req.body;
 
@@ -17,7 +16,6 @@ router.post('/', authenticate, async (req, res) => {
     }
 
     try {
-        // Ellenőrizzük, hogy az időpont szabad-e
         const [slots] = await pool.query(
             'SELECT * FROM time_slots WHERE id = ? AND is_booked = FALSE',
             [slot_id]
@@ -28,13 +26,11 @@ router.post('/', authenticate, async (req, res) => {
 
         const slot = slots[0];
 
-        // Foglalás létrehozása
         const [result] = await pool.query(
             'INSERT INTO appointments (user_id, company_id, slot_id, notes, service_id) VALUES (?, ?, ?, ?, ?)',
             [req.user.id, slot.company_id, slot_id, notes || null, service_id || null]
         );
 
-        // Időpont foglalttá jelölése
         await pool.query('UPDATE time_slots SET is_booked = TRUE WHERE id = ?', [slot_id]);
 
         res.status(201).json({ id: result.insertId, message: 'Időpont sikeresen lefoglalva!' });
@@ -44,11 +40,9 @@ router.post('/', authenticate, async (req, res) => {
     }
 });
 
-// GET /api/appointments/my - saját foglalások (user és company is)
 router.get('/my', authenticate, async (req, res) => {
     try {
         if (req.user.role === 'user') {
-            // Felhasználó saját foglalásai
             const [appointments] = await pool.query(
                 `SELECT a.id, a.status, a.notes, a.created_at,
                 c.name AS company_name, c.address AS company_address,
@@ -66,7 +60,6 @@ router.get('/my', authenticate, async (req, res) => {
             );
             res.json(appointments);
         } else if (req.user.role === 'company') {
-            // Cég saját foglalásai
             const [companies] = await pool.query(
                 'SELECT id FROM companies WHERE user_id = ?',
                 [req.user.id]
@@ -94,7 +87,6 @@ router.get('/my', authenticate, async (req, res) => {
     }
 });
 
-// PATCH /api/appointments/:id/status - foglalás státuszának módosítása
 router.patch('/:id/status', authenticate, async (req, res) => {
     const { status } = req.body;
 
@@ -104,7 +96,6 @@ router.patch('/:id/status', authenticate, async (req, res) => {
 
     try {
         if (req.user.role === 'company') {
-            // Cég módosíthat (megerősít vagy lemond)
             const [companies] = await pool.query(
                 'SELECT id FROM companies WHERE user_id = ?',
                 [req.user.id]
@@ -123,7 +114,6 @@ router.patch('/:id/status', authenticate, async (req, res) => {
 
             await pool.query('UPDATE appointments SET status = ? WHERE id = ?', [status, req.params.id]);
 
-            // Ha lemondás: időpont felszabadítása
             if (status === 'cancelled') {
                 await pool.query(
                     'UPDATE time_slots SET is_booked = FALSE WHERE id = ?',
@@ -131,7 +121,6 @@ router.patch('/:id/status', authenticate, async (req, res) => {
                 );
             }
         } else if (req.user.role === 'user') {
-            // Felhasználó csak lemondhat
             if (status !== 'cancelled') {
                 return res.status(403).json({ error: 'Felhasználó csak lemondhatja a foglalást' });
             }

@@ -6,7 +6,6 @@ import { authenticate } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// POST /api/auth/register - regisztráció
 router.post('/register', async (req, res) => {
     const { name, email, password, role } = req.body;
 
@@ -43,7 +42,6 @@ router.post('/register', async (req, res) => {
     }
 });
 
-// POST /api/auth/login - bejelentkezés
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
@@ -76,7 +74,6 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// GET /api/auth/me - bejelentkezett felhasználó adatai
 router.get('/me', authenticate, async (req, res) => {
     try {
         const [users] = await pool.query(

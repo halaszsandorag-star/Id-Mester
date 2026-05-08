@@ -9,7 +9,7 @@ const Register = () => {
         email: '',
         password: '',
         confirmPassword: '',
-        role: 'user' // 'user' vagy 'company'
+        role: 'user'
     });
 
     const [error, setError] = useState('');
@@ -74,7 +74,6 @@ const Register = () => {
 
                 <form className="space-y-4" onSubmit={handleSubmit}>
 
-                    {/* Fiók típus választó */}
                     <div className="grid grid-cols-2 gap-4 my-6">
                         <button
                             type="button"

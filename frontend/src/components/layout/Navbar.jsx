@@ -32,7 +32,6 @@ const Navbar = () => {
                         </Link>
                     </div>
 
-                    {/* Asztali menü */}
                     <div className="hidden md:flex items-center space-x-6">
                         <Link to="/companies" className="text-slate-600 hover:text-primary-600 font-medium transition-colors hover:-translate-y-0.5 transform">
                             Szolgáltatók
@@ -70,7 +69,6 @@ const Navbar = () => {
                         )}
                     </div>
 
-                    {/* Mobil menü gomb */}
                     <div className="flex items-center md:hidden">
                         <button
                             onClick={() => setIsOpen(!isOpen)}
@@ -82,7 +80,6 @@ const Navbar = () => {
                 </div>
             </div>
 
-            {/* Mobil menü panel */}
             {isOpen && (
                 <div className="md:hidden glass border-b border-t animate-fade-in absolute w-full left-0 top-20 shadow-xl">
                     <div className="px-4 pt-2 pb-6 space-y-2">

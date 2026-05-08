@@ -7,7 +7,6 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Alkalmazás indulásakor ellenőrizzük a tokent és lekérjük az adatokat
     useEffect(() => {
         const fetchUser = async () => {
             const token = localStorage.getItem('token');

@@ -3,7 +3,6 @@ import pool from '../db.js';
 
 const router = express.Router();
 
-// GET /api/categories - összes kategória lekérése
 router.get('/', async (req, res) => {
     try {
         const [categories] = await pool.query(

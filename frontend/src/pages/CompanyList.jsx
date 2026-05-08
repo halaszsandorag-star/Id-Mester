@@ -8,7 +8,6 @@ const CompanyList = () => {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
 
-    // URL-ből érkező kategória (ha van)
     const query = new URLSearchParams(window.location.search);
     const categoryId = query.get('category');
 
@@ -42,7 +41,6 @@ const CompanyList = () => {
             <div className="mb-8">
                 <h1 className="text-3xl font-extrabold text-gray-900 mb-4">Szolgáltatók listája</h1>
 
-                {/* Keresőmező */}
                 <div className="max-w-xl relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <Search className="h-5 w-5 text-gray-400" />

@@ -23,7 +23,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
     storage: storage,
-    limits: { fileSize: 3 * 1024 * 1024 }, // Max 3MB
+    limits: { fileSize: 3 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
         if (file.mimetype.startsWith('image/')) {
             cb(null, true);
@@ -33,7 +33,6 @@ const upload = multer({
     }
 });
 
-// GET /api/companies - összes cég listázása (keresés + szűrés)
 router.get('/', async (req, res) => {
     const { search, category } = req.query;
 
@@ -67,8 +66,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-// GET /api/companies/my/profile - bejelentkezett cég profilja
-// FONTOS: ez a route az /:id ELŐTT szerepel, hogy ne ütközzön!
 router.get('/my/profile', authenticate, requireRole('company'), async (req, res) => {
     try {
         const [companies] = await pool.query(
@@ -89,7 +86,6 @@ router.get('/my/profile', authenticate, requireRole('company'), async (req, res)
     }
 });
 
-// GET /api/companies/:id - egy cég adatai
 router.get('/:id', async (req, res) => {
     try {
         const [companies] = await pool.query(
@@ -111,7 +107,6 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// POST /api/companies - cég profil létrehozása
 router.post('/', authenticate, requireRole('company'), upload.single('logo'), async (req, res) => {
     const { name, description, category_id, address, phone } = req.body;
     let logo_url = null;
@@ -145,7 +140,6 @@ router.post('/', authenticate, requireRole('company'), upload.single('logo'), as
     }
 });
 
-// PUT /api/companies/:id - cég profil frissítése
 router.put('/:id', authenticate, requireRole('company'), upload.single('logo'), async (req, res) => {
     const { name, description, category_id, address, phone } = req.body;
 
@@ -179,7 +173,6 @@ router.put('/:id', authenticate, requireRole('company'), upload.single('logo'), 
     }
 });
 
-// GET /api/companies/:id/slots - egy cég szabad időpontjai
 router.get('/:id/slots', async (req, res) => {
     try {
         const { date } = req.query;
@@ -205,7 +198,6 @@ router.get('/:id/slots', async (req, res) => {
     }
 });
 
-// POST /api/companies/slots/add - új időpont hozzáadása (cég)
 router.post('/slots/add', authenticate, requireRole('company'), async (req, res) => {
     const { slot_date, start_time, end_time } = req.body;
 
@@ -213,10 +205,7 @@ router.post('/slots/add', authenticate, requireRole('company'), async (req, res)
         return res.status(400).json({ error: 'Dátum, kezdési és befejezési idő megadása kötelező' });
     }
 
-    // Múltbéli időpont hiba (Szerveridő alapán)
     const now = new Date();
-    // A magyar időzóna miatti kiszámításhoz jobb az egyszerűbb string manipuláció (locale bázisán), de hagyatkozzunk a sima Date object formátumra, de eltolva
-    // Az egyszerűség kedvéért az express-ben érkező dátumot validáljuk szerver localtime-ban:
     const offset = now.getTimezoneOffset();
     const localNow = new Date(now.getTime() - (offset * 60 * 1000));
     const currentDate = localNow.toISOString().split('T')[0];
@@ -248,7 +237,6 @@ router.post('/slots/add', authenticate, requireRole('company'), async (req, res)
     }
 });
 
-// DELETE /api/companies/slots/:id - időpont törlése (cég)
 router.delete('/slots/:id', authenticate, requireRole('company'), async (req, res) => {
     try {
         const [companies] = await pool.query(
@@ -275,7 +263,6 @@ router.delete('/slots/:id', authenticate, requireRole('company'), async (req, re
     }
 });
 
-// GET /api/companies/my/slots - saját cég összes időpontja (cég dashboard)
 router.get('/my/slots', authenticate, requireRole('company'), async (req, res) => {
     try {
         const [companies] = await pool.query(
@@ -288,7 +275,6 @@ router.get('/my/slots', authenticate, requireRole('company'), async (req, res) =
 
         const companyId = companies[0].id;
 
-        // Töröljük a cég múltbéli szabad (nem lefoglalt) időpontjait, ha vannak
         await pool.query(
             `DELETE FROM time_slots 
              WHERE company_id = ? AND is_booked = FALSE 
@@ -296,7 +282,6 @@ router.get('/my/slots', authenticate, requireRole('company'), async (req, res) =
             [companyId]
         );
 
-        // Visszaadjuk a (maradék) érvényeseket
         const [slots] = await pool.query(
             `SELECT * FROM time_slots
              WHERE company_id = ?
@@ -310,7 +295,6 @@ router.get('/my/slots', authenticate, requireRole('company'), async (req, res) =
     }
 });
 
-// GET /api/companies/my/services - saját cég szolgáltatásai
 router.get('/my/services', authenticate, requireRole('company'), async (req, res) => {
     try {
         const [companies] = await pool.query(
@@ -330,7 +314,6 @@ router.get('/my/services', authenticate, requireRole('company'), async (req, res
     }
 });
 
-// POST /api/companies/services - új szolgáltatás hozzáadása
 router.post('/services', authenticate, requireRole('company'), async (req, res) => {
     const { name, description, price, duration_minutes } = req.body;
     if (!name) return res.status(400).json({ error: 'A szolgáltatás neve kötelező' });
@@ -353,7 +336,6 @@ router.post('/services', authenticate, requireRole('company'), async (req, res) 
     }
 });
 
-// DELETE /api/companies/services/:id - szolgáltatás törlése
 router.delete('/services/:id', authenticate, requireRole('company'), async (req, res) => {
     try {
         const [companies] = await pool.query(
@@ -370,7 +352,6 @@ router.delete('/services/:id', authenticate, requireRole('company'), async (req,
     }
 });
 
-// GET /api/companies/:id/services - publikus listázás
 router.get('/:id/services', async (req, res) => {
     try {
         const [services] = await pool.query(

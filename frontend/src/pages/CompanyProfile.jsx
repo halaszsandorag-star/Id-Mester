@@ -15,7 +15,6 @@ const CompanyProfile = () => {
     const [bookingLoading, setBookingLoading] = useState(false);
     const [successMsg, setSuccessMsg] = useState('');
 
-    // Foglaláshoz szükséges állapotok
     const [selectedSlot, setSelectedSlot] = useState(null);
     const [selectedService, setSelectedService] = useState('');
     const [notes, setNotes] = useState('');
@@ -42,7 +41,6 @@ const CompanyProfile = () => {
         }
     };
 
-    // Csoportosítás dátum szerint a könnyebb megjelenítéshez
     const groupedSlots = slots.reduce((acc, slot) => {
         const d = slot.slot_date.split('T')[0];
         if (!acc[d]) acc[d] = [];
@@ -80,7 +78,6 @@ const CompanyProfile = () => {
             setSelectedSlot(null);
             setSelectedService('');
             setNotes('');
-            // Újratöltjük az időpontokat, hogy eltűnjön a foglalt
             const slotsRes = await api.get(`/companies/${id}/slots`);
             setSlots(slotsRes.data);
         } catch (error) {

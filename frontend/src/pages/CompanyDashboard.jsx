@@ -12,18 +12,15 @@ const CompanyDashboard = () => {
     const [services, setServices] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Új időpont űrlap
     const [newDate, setNewDate] = useState('');
     const [newStartTime, setNewStartTime] = useState('');
     const [newEndTime, setNewEndTime] = useState('');
 
-    // Új szolgáltatás űrlap
     const [newServiceName, setNewServiceName] = useState('');
     const [newServicePrice, setNewServicePrice] = useState('');
     const [newServiceDuration, setNewServiceDuration] = useState('30');
     const [newServiceDesc, setNewServiceDesc] = useState('');
 
-    // Profil Form a szerkesztéshez / létrehozáshoz
     const [isEditingProfile, setIsEditingProfile] = useState(false);
     const [logoPreview, setLogoPreview] = useState(null);
     const [profileForm, setProfileForm] = useState({
@@ -197,7 +194,6 @@ const CompanyDashboard = () => {
 
     if (loading) return <div className="p-8 text-center pt-24 text-gray-500">Adatok betöltése...</div>;
 
-    // Ha még nincs profilja, vagy szerkeszteni akarja
     if (!profile || isEditingProfile) {
         return (
             <div className="max-w-3xl mx-auto py-12 px-4">
@@ -211,7 +207,6 @@ const CompanyDashboard = () => {
 
                     <form onSubmit={handleProfileSubmit} className="space-y-6">
 
-                        {/* Kép feltöltő komponens */}
                         <div className="flex flex-col md:flex-row gap-6 items-center">
                             <div className="relative w-32 h-32 rounded-2xl bg-slate-100 border-2 border-dashed border-slate-300 flex items-center justify-center overflow-hidden shrink-0 group">
                                 {logoPreview ? (
@@ -283,11 +278,9 @@ const CompanyDashboard = () => {
         );
     }
 
-    // Alap Dashboard nézet
     return (
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
 
-            {/* Profil fejléc */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div className="flex items-center gap-5">
                     {profile.logo_url ? (
@@ -314,10 +307,7 @@ const CompanyDashboard = () => {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Bal oldali oszlop: Szolgáltatások és Szabad időpontok kezelése */}
                 <div className="lg:col-span-1 space-y-6">
-
-                    {/* Szolgáltatások szekció */}
                     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                         <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                             <Briefcase className="w-5 h-5 text-indigo-600" /> Szolgáltatásaim
@@ -418,7 +408,6 @@ const CompanyDashboard = () => {
                     </div>
                 </div>
 
-                {/* Jobb oldali oszlop: Beérkezett foglalások */}
                 <div className="lg:col-span-2">
                     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 overflow-hidden min-h-[500px]">
                         <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2 border-b pb-4">
